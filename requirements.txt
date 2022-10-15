@@ -4,6 +4,7 @@ setuptools>=26
 twine
 wheel>=0.29
 python-dotenv # consultar sobre esto...
+unidecode
 
 # data science
 numpy

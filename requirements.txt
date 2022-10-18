@@ -10,6 +10,7 @@ unidecode
 numpy
 pandas
 scikit-learn
+ntlk
 
 # tests/linter
 black

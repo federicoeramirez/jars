@@ -38,3 +38,6 @@ lyricsgenius
 
 # text2emotion
 text2emotion
+
+transformers
+langdetect

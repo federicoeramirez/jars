@@ -1,43 +1,27 @@
 # packaging
 pip>=9
 setuptools>=26
-twine
-wheel>=0.29
-python-dotenv # consultar sobre esto...
-unidecode
 
 # data science
 numpy
 pandas
 scikit-learn
-ntlk
-
-# tests/linter
-black
-coverage
-flake8
-pytest
-yapf
-
-# API
-gcsfs
-google-cloud-storage
-mlflow
-s3fs
+ntlk==3.6.7
 
 # utilities
-six>=1.14
+os
 joblib
-memoized-property
-termcolor
-joblib
+unidecode
 
 # spotify API
 spotipy
 lyricsgenius
 
-# text2emotion
-text2emotion
+# text analysis
+#text2emotion
+#transformers
+#langdetect
 
-transformers
-langdetect
+# API
+fastapi
+uvicorn

@@ -1,3 +1,4 @@
+from fastapi import FastAPI
 from jars.data.local_disk import get_local_data
 from jars.ml_logic.utils import (load_sp,
                                  get_song_features,
@@ -5,9 +6,14 @@ from jars.ml_logic.utils import (load_sp,
                                  make_playlist,
                                  find_similar_songs)
 
-def get_recommendation(song: str, amount=15, playlist=True):
+app = FastAPI()
+
+@app.get("/recommendation")
+def get_recommendation(song: str, amount=15, playlist=False):
     """
-    Receives artist and song name as input and gives a recommendation of songs.
+    Receives song's name (and artist name) as input and returns a recommendation of songs.
+    "amount" specifies the desired number (int) of recommended songs.
+    "playlist" True or False to create playlist on Spotify with recommended songs.
     """
     # load spotipy to connect to the Spotify API
     sp = load_sp()
@@ -30,7 +36,9 @@ def get_recommendation(song: str, amount=15, playlist=True):
         # creates a playlist
         make_playlist(recommendation_id, sp)
 
-    print(f'List of {amount} recommended songs:')
-    print(recommendation)
-
     return dict(recommendation)
+
+
+@app.get("/")
+def root():
+    return {'greeting': 'Hello'}

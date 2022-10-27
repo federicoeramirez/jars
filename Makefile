@@ -53,3 +53,7 @@ pypi_test:
 
 pypi:
 	@twine upload dist/* -u $(PYPI_USERNAME)
+
+#################### PACKAGE ACTIONS ###################
+recommendation:
+	python -c 'from jars.interface.main import get_recommendation; get_recommendation("linkin park in the end")'

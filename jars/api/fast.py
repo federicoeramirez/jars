@@ -9,7 +9,7 @@ from jars.ml_logic.utils import (load_sp,
 app = FastAPI()
 
 @app.get("/recommendation")
-def get_recommendation(song: str, amount=15, playlist=False):
+def get_recommendation(song: str, amount: int = 15, playlist: bool = False):
     """
     Receives song's name (and artist name) as input and returns a recommendation of songs.
     "amount" specifies the desired number (int) of recommended songs.
@@ -18,11 +18,11 @@ def get_recommendation(song: str, amount=15, playlist=False):
     # load spotipy to connect to the Spotify API
     sp = load_sp()
 
-    # get song features
-    index, id, features = get_song_features(song, sp)
-
     # load data
     df = get_local_data()
+
+    # get song features
+    index, id, features = get_song_features(song, sp)
 
     if id not in df['id']:
         # add new song to dataframe

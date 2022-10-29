@@ -133,7 +133,6 @@ def make_playlist(recommendation_id: list, sp: object):
 
     # obtaining playlist id
     playlist_id = playlist['id']
-    playlist_id
 
     username = None
 

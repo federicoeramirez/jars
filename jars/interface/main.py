@@ -5,7 +5,7 @@ from jars.ml_logic.utils import (load_sp,
                                  make_playlist,
                                  find_similar_songs)
 
-def get_recommendation(song: str, amount=15, playlist=True):
+def get_recommendation(song: str, amount: int = 15, playlist: bool = True):
     """
     Receives artist and song name as input and gives a recommendation of songs.
     """

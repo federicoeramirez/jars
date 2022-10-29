@@ -14,12 +14,15 @@ def load_sp():
     scope = 'playlist-modify-private'
     username = None
 
-    spotify_token = spotipy.util.prompt_for_user_token(username,
-                                                       scope,
-                                                       cid,
-                                                       secret,
-                                                       redirect_uri)
+    # auth_manager=SpotifyOAuth(scope=scope)
+    # spotipy.Spotify(auth_manager=auth_manager)
 
+    #spotify_token = spotipy.util.prompt_for_user_token(username,
+    #                                                   scope,
+    #                                                   cid,
+    #                                                   secret,
+    #                                                   redirect_uri)
+    spotify_token = os.environ.get('SPOTIFY_TOKEN')
     sp = spotipy.Spotify(auth=spotify_token)
 
     print('Spotify credentials loaded ✅')

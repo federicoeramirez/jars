@@ -16,6 +16,8 @@ def get_recommendation(song: str, amount: int = 15, playlist: bool = False):
     "amount" specifies the desired number (int) of recommended songs.
     "playlist" True or False to create playlist on Spotify with recommended songs.
     """
+    if song == None:
+        return print('Waiting for input...')
     # load spotipy to connect to the Spotify API
     sp = load_sp()
 

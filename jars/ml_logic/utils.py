@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from lyricsgenius import Genius
 from jars.ml_logic.lyrics import get_lyrics, preprocess_language
-from jars.ml_logic.emotions import get_emotions, preprocess_emotions
+from jars.ml_logic.emotions import get_emotions
 
 def load_sp():
     """

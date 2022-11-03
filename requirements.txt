@@ -5,7 +5,7 @@ scikit-learn
 #ntlk
 
 # utilities
-#os
+os
 #joblib
 unidecode
 
@@ -15,8 +15,8 @@ lyricsgenius
 
 # text analysis
 #text2emotion
-#transformers
-#langdetect
+transformers
+langdetect
 
 # API
 fastapi

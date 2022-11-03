@@ -21,3 +21,5 @@ lyricsgenius
 # API
 fastapi
 uvicorn
+
+protobuf==3.19.5

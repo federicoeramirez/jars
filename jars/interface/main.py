@@ -1,5 +1,6 @@
 from jars.data.local_disk import get_local_data
 from jars.ml_logic.utils import (load_sp,
+                                 load_genius,
                                  get_song_features,
                                  add_new_song,
                                  make_playlist,
@@ -12,9 +13,12 @@ def get_recommendation(song: str, amount: int = 15, playlist: bool = True):
     # load spotipy to connect to the Spotify API
     sp = load_sp()
 
-    # get song features
-    index, id, features = get_song_features(song, sp)
+    # load genius to connect to the Genius API
+    genius = load_genius()
 
+    # get song features
+    index, id, features = get_song_features(song, sp, genius)
+    #print(features)
     # load data
     df = get_local_data()
 

@@ -3,34 +3,42 @@ import spotipy
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from lyricsgenius import Genius
+from jars.ml_logic.lyrics import get_lyrics, preprocess_language
+from jars.ml_logic.emotions import get_emotions, preprocess_emotions
 
 def load_sp():
     """
     Load needed credentials and permissions for the Spotify API.
     """
-    cid = os.environ.get('SPOTIFY_CLIENT_ID')
-    secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
-    redirect_uri = os.environ.get('SPOTIPY_REDIRECT_URI')
-    scope = 'playlist-modify-private'
-    username = None
+    #client_id = os.environ.get('SPOTIFY_CLIENT_ID')
+    #client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
+    #redirect_uri = os.environ.get('SPOTIPY_REDIRECT_URI')
+    #scope = 'playlist-modify-private'
+    #username = None
 
-    # auth_manager=SpotifyOAuth(scope=scope)
-    # spotipy.Spotify(auth_manager=auth_manager)
-
-    #spotify_token = spotipy.util.prompt_for_user_token(username,
-    #                                                   scope,
-    #                                                   cid,
-    #                                                   secret,
-    #                                                   redirect_uri)
-    spotify_token = os.environ.get('SPOTIFY_TOKEN')
-    sp = spotipy.Spotify(auth=spotify_token)
+    client_credentials_manager = spotipy.oauth2.SpotifyClientCredentials()
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    sp.trace = True
 
     print('Spotify credentials loaded ✅')
 
     return sp
 
 
-def get_song_features(song: str, sp: object):
+def load_genius():
+    # get credentials for Genius API
+    genius_token = os.environ.get('LYRICSGENIUS_ACCESS_TOKEN')
+
+    # instantiate the Genius class with some useful hyperparameters
+    genius = Genius(genius_token,
+                    timeout=220,
+                    remove_section_headers=True,
+                    skip_non_songs=True)
+    return genius
+
+
+def get_song_features(song: str, sp: object, genius: object):
     """
     Receives search string and spotipy class object as input.
     Outputs song's "index", "id" and all "features" sorted.
@@ -40,6 +48,8 @@ def get_song_features(song: str, sp: object):
 
     if search_result == None:
         return print('Song not found. Try searching again!')
+
+    print('Song found in Spotify API ✅')
 
     # get song id for search
     id = search_result['tracks']['items'][0]['id']
@@ -75,7 +85,15 @@ def get_song_features(song: str, sp: object):
     # create index
     index = artist + ' - "' + name + '"'
 
-    print('Song found. Features loaded ✅')
+    features['lyrics'] = get_lyrics(artist, name, genius)
+    features = preprocess_language(features)
+
+    features['emotions'] = get_emotions(features['lyrics'])
+    features = pd.concat([features, pd.Series(features['emotions']).fillna('None')], axis=0)
+
+    features = features.drop(['lyrics', 'translated_lyrics', 'language', 'emotions'])
+
+    print('Features loaded ✅')
 
     return index, id, features
 
@@ -99,11 +117,11 @@ def find_similar_songs(df: pd.DataFrame, features: pd.Series, amount=15):
     Returns similar songs sorted and their id.
     """
     # drop columns that won't be used for vector space
-    df_processed = df.drop(columns=['id', 'lyrics', 'index'])
-    df_processed = df_processed.set_index(df['index'])
+    df_processed = df.drop(columns=['id', 'lyrics', 'index', 'translated_lyrics', 'language'])
+    df_processed = df_processed.set_index(df['index']).sort_index(axis=1)
 
     # create vector with song
-    v1 = np.array(features).reshape(1, -1)
+    v1 = np.array(features.sort_index()).reshape(1, -1)
 
     # calculate cosine similarity
     sim1 = cosine_similarity(df_processed, v1).reshape(-1)
@@ -116,6 +134,8 @@ def find_similar_songs(df: pd.DataFrame, features: pd.Series, amount=15):
 
     recommendation = recommendation_df['index'].head(amount).reset_index()['index']
     recommendation_id = recommendation_df['id'].head(amount)
+
+    print('Recommendation ready ✅')
 
     return recommendation, recommendation_id
 

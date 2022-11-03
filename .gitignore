@@ -8,3 +8,4 @@ raw_data/
 .env
 .ipynb
 .env.yaml
+key.json

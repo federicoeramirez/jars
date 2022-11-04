@@ -6,6 +6,6 @@ raw_data/
 *.csv
 **/__pycache__/
 .env
-.ipynb
+*.ipynb
 .env.yaml
 key.json

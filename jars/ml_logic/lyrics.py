@@ -1,7 +1,8 @@
 import unidecode
 from difflib import SequenceMatcher
 from langdetect import detect
-from google.cloud import translate_v2 as translate
+#from google.cloud import translate_v2 as translate
+from googletrans import Translator
 
 def clean_text(text):
     """
@@ -86,9 +87,10 @@ def detect_language(text):
 
 def translate_text(text, language):
     if language != ('en', 'None'):
-        translate_client = translate.Client()
-        result = translate_client.translate(text, target_language='en')
-        return result["translatedText"].replace('&#39;',"'")
+        #translate_client = translate.Client()
+        translate_client = Translator()
+        result = translate_client.translate(text, dest='en')
+        return result.text#["translatedText"].replace('&#39;',"'")
     else:
         return text
 

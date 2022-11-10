@@ -2,24 +2,20 @@
 numpy
 pandas
 scikit-learn
-#ntlk
 
 # utilities
-os
-#joblib
 unidecode
+protobuf==3.19.5
 
 # spotify API
 spotipy
 lyricsgenius
 
 # text analysis
-#text2emotion
-transformers
 langdetect
+transformers
+sentencepiece
 
 # API
 fastapi
 uvicorn
-
-protobuf==3.19.5

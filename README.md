@@ -1,74 +1,10 @@
-# Data analysis
-- Document here the project: jars
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+# JARS
+A music recommendation system project using lyrics' emotions analysis.
 
-Please document the project the better you can.
+## Description
+A dataset from Kaggle with musical features extracted from Spotify's API was used, in conjunction with Genius' API to get the lyrics from all available songs.
 
-# Startup the project
+Obtained lyrics were translated to English and then we used text analysis to get emotions as new features.
 
-The initial setup.
-
-Create virtualenv and install the project:
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
-    pip install pip -U; pip install -r requirements.txt
-```
-
-Unittest test:
-```bash
-make clean install test
-```
-
-Check for jars in gitlab.com/{group}.
-If your project is not set please add it:
-
-- Create a new project on `gitlab.com/{group}/jars`
-- Then populate it:
-
-```bash
-##   e.g. if group is "{group}" and project_name is "jars"
-git remote add origin git@github.com:{group}/jars.git
-git push -u origin master
-git push -u origin --tags
-```
-
-Functionnal test with a script:
-
-```bash
-cd
-mkdir tmp
-cd tmp
-jars-run
-```
-
-# Install
-
-Go to `https://github.com/{group}/jars` to see the project, manage issues,
-setup you ssh public key, ...
-
-Create a python3 virtualenv and activate it:
-
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
-
-Clone the project and install it:
-
-```bash
-git clone git@github.com:{group}/jars.git
-cd jars
-pip install -r requirements.txt
-make clean install test                # install and test
-```
-Functionnal test with a script:
-
-```bash
-cd
-mkdir tmp
-cd tmp
-jars-run
-```
+## Data Source
+Original dataset: [Spotify dataset](https://www.kaggle.com/datasets/vatsalmavani/spotify-dataset)

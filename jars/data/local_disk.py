@@ -42,7 +42,7 @@ def get_local_data():
     "sadness": "float32",
     }
 
-    path = '~/code/federicoeramirez/jars/processed_data/data_full_processed.csv'
+    path = '/processed_data/data_full_processed.csv'
 
     data = pd.read_csv(path, dtype=dtypes)
     data = data.rename(columns={'index':'full_name'})

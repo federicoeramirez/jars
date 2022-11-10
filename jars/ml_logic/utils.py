@@ -166,9 +166,7 @@ def find_similar_songs(df: pd.DataFrame, features: pd.Series, amount=20):
     recommendation_df = recommendation_df.reset_index()
     recommendation_df.drop_duplicates(subset='full_name', inplace=True)
     recommendation = recommendation_df['full_name'].reset_index(drop=True).head(amount)
-    print(recommendation)
     recommendation_id = recommendation_df['id'].head(amount)
-    print(recommendation_id)
 
     print('Recommendation ready ✅')
 

@@ -1,8 +1,10 @@
 import unidecode
 from difflib import SequenceMatcher
 from langdetect import detect
-#from google.cloud import translate_v2 as translate
-from googletrans import Translator
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-mul-en")
+model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-mul-en")
 
 def clean_text(text):
     """
@@ -26,6 +28,9 @@ def clean_text(text):
 
 
 def similar(a, b):
+    """
+    Compares similarity between 2 sequences.
+    """
     return SequenceMatcher(None, a, b).ratio()
 
 
@@ -47,9 +52,7 @@ def get_lyrics(artist, song_title, genius):
             .replace('\u200b', ' ')\
             .lower())
         api_response = api_response.split(' by ')
-        # check similarity
         song_similar = similar(api_response[0], song_title)
-        # artist_similar = similar(api_response[1], artist)
 
         if song_similar >= 0.9:
             # all lyrics responses come with the song's title and 'Lyrics' str
@@ -64,14 +67,15 @@ def get_lyrics(artist, song_title, genius):
                 .replace('\u2005', ' ')\
                 .replace('\\', ' ')\
                 .strip()
-
         else:
             lyrics = 'None'
 
     else:
         lyrics = 'None'
+
     if lyrics == 'None':
         print("Lyrics not found in Genius' database ❌")
+
     else:
         print('Lyrics loaded ✅')
 
@@ -79,26 +83,43 @@ def get_lyrics(artist, song_title, genius):
 
 
 def detect_language(text):
-    if text != 'None':
-        return detect(text)
-    else:
+    """
+    Detects language of text.
+    """
+    if text == 'None':
         return 'None'
+    else:
+        try:
+            return detect(text)
+        except:
+            return 'None'
 
 
 def translate_text(text, language):
-    if language != ('en', 'None'):
-        #translate_client = translate.Client()
-        translate_client = Translator()
-        result = translate_client.translate(text, dest='en')
-        return result.text#["translatedText"].replace('&#39;',"'")
-    else:
+    """
+    Translates text to english autodetecting input language.
+    """
+    if text == 'None':
         return text
+
+    elif language == 'en':
+        return text
+
+    else:
+        batch = tokenizer([text[:1300]], return_tensors="pt", max_length=512, truncation=True)
+        generated_ids = model.generate(**batch)
+        result = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
+        #time.sleep(1)
+        return result
 
 
 def preprocess_language(data):
-
+    """
+    Receives a DataFrame and generates 'language' and 'translated_lyrics' columns.
+    """
     data['language'] = detect_language(data['lyrics'])
-
     data['translated_lyrics'] = translate_text(data['lyrics'], data['language'])
+
+    print('Language features loaded ✅')
 
     return data
